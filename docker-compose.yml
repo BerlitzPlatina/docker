@@ -1,0 +1,31 @@
+services:
+  php-apache-environment:
+    build: docker/
+    container_name: php-apache
+    image: php:8.0-apache
+    volumes:
+      - ./php/src:/var/www/html/
+    ports:
+      - 9000:80
+  db:
+    container_name: db
+    image: mysql
+    # restart: always
+    volumes:
+    - ./docker/mysql:/var/lib/mysql
+    environment:
+        MYSQL_ROOT_PASSWORD: train
+        MYSQL_DATABASE: train
+        MYSQL_USER: train
+        MYSQL_PASSWORD: train
+    ports:
+        - "9906:3306"
+  phpmyadmin:
+    image: phpmyadmin/phpmyadmin
+    ports:
+        - '9090:80'
+    restart: always
+    environment:
+        PMA_HOST: db
+    depends_on:
+        - db
